@@ -1,62 +1,120 @@
 // Copyright 2026 Voxelio.
 // Licensed under the PolyForm Noncommercial License 1.0.0.
 
-import MetalSplatter
-import Msplat
-import SplatIO
 import SwiftUI
+import UIKit
 
 struct ContentView: View {
+    @StateObject private var library = LocalGaussianLibrary()
+    @State private var path: [UUID] = []
+    @State private var showsCapture = false
+    @State private var pendingAssetID: UUID?
+
     var body: some View {
-        NavigationStack {
-            VStack(alignment: .leading, spacing: 24) {
-                Spacer()
-
-                Image(systemName: "view.3d")
-                    .font(.system(size: 48, weight: .medium))
-                    .foregroundStyle(.tint)
-
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("On-device Gaussian Splatting")
-                        .font(.largeTitle.bold())
-
-                    Text("Capture with ARKit, train with msplat, and render with MetalSplatter.")
-                        .font(.title3)
-                        .foregroundStyle(.secondary)
+        NavigationStack(path: $path) {
+            Group {
+                if library.assets.isEmpty {
+                    ContentUnavailableView {
+                        Label("No Gaussian splats", systemImage: "view.3d")
+                    } description: {
+                        Text("Capture a subject, train it on device, and inspect the result in Metal.")
+                    } actions: {
+                        Button("New capture", systemImage: "camera") {
+                            showsCapture = true
+                        }
+                        .buttonStyle(.borderedProminent)
+                    }
+                } else {
+                    List {
+                        Section {
+                            ForEach(library.assets) { asset in
+                                NavigationLink(value: asset.id) {
+                                    GaussianAssetRow(asset: asset)
+                                }
+                            }
+                            .onDelete(perform: delete)
+                        } header: {
+                            Text("Local projects")
+                        } footer: {
+                            Text("Images, camera poses, checkpoints, and trained splats stay in this app's Documents directory.")
+                        }
+                    }
                 }
-
-                VStack(alignment: .leading, spacing: 12) {
-                    pipelineRow(number: 1, title: "Capture", detail: "ARKit images and camera poses")
-                    pipelineRow(number: 2, title: "Train", detail: "Metal-powered on-device 3DGS")
-                    pipelineRow(number: 3, title: "Render", detail: "Real-time Gaussian splats")
-                }
-
-                Spacer()
-
-                Label("Source packages connected", systemImage: "checkmark.seal.fill")
-                    .font(.footnote.weight(.medium))
-                    .foregroundStyle(.secondary)
             }
-            .padding(24)
-            .navigationTitle("Voxelio 3DGS")
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle("Gaussian Splatting")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("New capture", systemImage: "plus") {
+                        showsCapture = true
+                    }
+                }
+            }
+            .navigationDestination(for: UUID.self) { id in
+                GaussianAssetDetailView(assetID: id, library: library)
+            }
+            .fullScreenCover(isPresented: $showsCapture) {
+                GaussianCaptureView(library: library) { asset in
+                    pendingAssetID = asset.id
+                    showsCapture = false
+                }
+            }
+            .onChange(of: showsCapture) { _, isPresented in
+                guard !isPresented, let id = pendingAssetID else { return }
+                pendingAssetID = nil
+                path.append(id)
+            }
+            .onAppear { library.refresh() }
         }
     }
 
-    private func pipelineRow(number: Int, title: String, detail: String) -> some View {
-        HStack(spacing: 12) {
-            Text(number.formatted())
-                .font(.caption.monospacedDigit().bold())
-                .frame(width: 28, height: 28)
-                .background(.quaternary, in: Circle())
+    private func delete(at offsets: IndexSet) {
+        for index in offsets {
+            library.remove(library.assets[index])
+        }
+    }
+}
 
-            VStack(alignment: .leading, spacing: 2) {
-                Text(title)
+private struct GaussianAssetRow: View {
+    let asset: LocalGaussianAsset
+
+    var body: some View {
+        HStack(spacing: 14) {
+            thumbnail
+                .frame(width: 72, height: 72)
+                .background(Color.black)
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+
+            VStack(alignment: .leading, spacing: 5) {
+                Text(asset.title)
                     .font(.headline)
-                Text(detail)
+
+                Text(asset.subtitle)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
+
+                HStack(spacing: 10) {
+                    Label(asset.sampleCount.formatted(), systemImage: "photo.stack")
+                    if let steps = asset.completedSteps {
+                        Label(steps.formatted(), systemImage: "cpu")
+                    }
+                }
+                .font(.caption.monospacedDigit())
+                .foregroundStyle(.tertiary)
             }
+        }
+        .padding(.vertical, 4)
+    }
+
+    @ViewBuilder
+    private var thumbnail: some View {
+        if let image = UIImage(contentsOfFile: asset.thumbnailURL.path) {
+            Image(uiImage: image)
+                .resizable()
+                .scaledToFill()
+        } else {
+            Image(systemName: "view.3d")
+                .font(.title2)
+                .foregroundStyle(.secondary)
         }
     }
 }
