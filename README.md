@@ -4,6 +4,9 @@ A small, source-transparent iOS reference project for capturing a scene with
 ARKit, training a 3D Gaussian Splat on device with msplat, and rendering the
 result in real time with MetalSplatter.
 
+> Prefer using the finished scanning workflow instead of building it?
+> [Download Voxelio on the App Store](https://www.voxelio.app/go/github).
+
 > [!IMPORTANT]
 > This repository is under active development. The end-to-end flow is implemented,
 > but capture quality, memory use, and training time still need validation
