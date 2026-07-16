@@ -15,13 +15,11 @@ result in real time with MetalSplatter.
 ## Demo
 
 <p align="center">
-  <a href="./media/voxelio-ios-3dgs-demo.webm?raw=1">
-    <img src="./media/voxelio-ios-3dgs-demo-poster.jpg" width="360" alt="Voxelio iOS Gaussian Splat rendered on device">
-  </a>
+  <img src="./media/voxelio-ios-3dgs-demo.gif" width="360" alt="Voxelio iOS Gaussian Splat rendered on device">
 </p>
 
 <p align="center">
-  <a href="./media/voxelio-ios-3dgs-demo.webm?raw=1"><strong>▶ Watch the 5-second on-device demo</strong></a>
+  <a href="./media/voxelio-ios-3dgs-demo.webm?raw=1"><strong>Watch the full-quality WebM</strong></a>
 </p>
 
 ## What the demo does
