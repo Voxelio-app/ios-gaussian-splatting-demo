@@ -1,0 +1,18 @@
+.DS_Store
+
+# Xcode user state
+*.xcuserstate
+xcuserdata/
+
+# Build products
+DerivedData/
+build/
+*.moved-aside
+
+# Swift Package Manager local state
+.build/
+.swiftpm/xcode/package.xcworkspace/xcuserdata/
+
+# Legacy Xcode package metadata
+*.xccheckout
+*.xcscmblueprint

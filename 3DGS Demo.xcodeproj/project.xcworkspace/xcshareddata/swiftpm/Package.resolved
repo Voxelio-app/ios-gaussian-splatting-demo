@@ -1,0 +1,40 @@
+{
+  "originHash" : "1e429f239ca9525ab455cfd2dd3f7d80c46fc415965ae4a9d5a9d7882635ad6e",
+  "pins" : [
+    {
+      "identity" : "metalsplatter",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Voxelio-app/MetalSplatter.git",
+      "state" : {
+        "revision" : "848df6b6e3e9396812c22a7cf74d0702b6f77484"
+      }
+    },
+    {
+      "identity" : "msplat",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Voxelio-app/msplat.git",
+      "state" : {
+        "revision" : "d620d9c58d270e7de9e34a9d8a85dcf938a5070d"
+      }
+    },
+    {
+      "identity" : "spz-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/scier/spz-swift.git",
+      "state" : {
+        "revision" : "e2410c91bceba2539c11157ad92e488ef6e16416",
+        "version" : "2.1.0"
+      }
+    },
+    {
+      "identity" : "swift-argument-parser",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-argument-parser",
+      "state" : {
+        "revision" : "6a52f3251125d74daf04fcbd5e6f08a75d074382",
+        "version" : "1.8.2"
+      }
+    }
+  ],
+  "version" : 3
+}
