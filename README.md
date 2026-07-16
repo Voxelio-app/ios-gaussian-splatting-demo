@@ -12,6 +12,18 @@ result in real time with MetalSplatter.
 > but capture quality, memory use, and training time still need validation
 > across more physical devices.
 
+## Demo
+
+<p align="center">
+  <a href="./media/voxelio-ios-3dgs-demo.webm?raw=1">
+    <img src="./media/voxelio-ios-3dgs-demo-poster.jpg" width="360" alt="Voxelio iOS Gaussian Splat rendered on device">
+  </a>
+</p>
+
+<p align="center">
+  <a href="./media/voxelio-ios-3dgs-demo.webm?raw=1"><strong>▶ Watch the 5-second on-device demo</strong></a>
+</p>
+
 ## What the demo does
 
 1. Captures camera images, intrinsics, and poses with ARKit.
